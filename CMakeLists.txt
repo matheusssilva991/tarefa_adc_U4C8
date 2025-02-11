@@ -57,6 +57,7 @@ target_include_directories(tarefa_adc_U4C8 PRIVATE
 target_link_libraries(tarefa_adc_U4C8
         hardware_i2c
         hardware_adc
+        hardware_pwm
         )
 
 pico_add_extra_outputs(tarefa_adc_U4C8)
