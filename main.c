@@ -42,7 +42,7 @@ static volatile uint32_t last_time_btn_sw = 0; // Armazena o tempo do último ev
 static volatile uint green_led_slice;
 static volatile uint blue_led_slice;
 static volatile uint red_led_slice;
-static volatile bool is_leds_pwm_enabled = false;
+static volatile bool is_leds_pwm_enabled = true;
 static volatile bool is_green_led_on = false;
 
 int main()
@@ -87,10 +87,17 @@ int main()
         // Imprime os valores lidos na comunicação serial.
         printf("VRX: %u, VRY: %u, SW: %d\n", vrx_value_raw, vry_value_raw, sw_value);
 
-        /* bool condition;
         if (vrx_value_raw > ADC_MIDDLE_VALUE - VRXY_VALUE_ERROR && vrx_value_raw < ADC_MIDDLE_VALUE + VRXY_VALUE_ERROR) {
+            pwm_set_gpio_level(RED_LED_PIN, 0);
+        } else {
+            pwm_set_gpio_level(RED_LED_PIN, ADC_MAX_VALUE * (vrx_value_raw / (float)ADC_MAX_VALUE));
+        }
 
-        } */
+        if (vry_value_raw > ADC_MIDDLE_VALUE - VRXY_VALUE_ERROR && vry_value_raw < ADC_MIDDLE_VALUE + VRXY_VALUE_ERROR) {
+            pwm_set_gpio_level(BLUE_LED_PIN, 0);
+        } else {
+            pwm_set_gpio_level(BLUE_LED_PIN, ADC_MAX_VALUE * (vry_value_raw / (float)ADC_MAX_VALUE));
+        }
 
         ssd1306_fill(&ssd, !sw_value);
         ssd1306_rect(&ssd, 0, 0, 128, 64, sw_value, !sw_value); // Desenha um retângulo
@@ -177,7 +184,7 @@ void gpio_irq_handler(uint gpio, uint32_t events) {
     {
         reset_usb_boot(0, 0);
 
-    } else if (gpio == BTN_A_PIN && (current_time - last_time_btn_a > 200000))
+    } else if (gpio == BTN_A_PIN && (current_time - last_time_btn_a > 250000))
     {
         // Atualiza o tempo do último evento do botão A.
         last_time_btn_a = current_time;
@@ -192,7 +199,7 @@ void gpio_irq_handler(uint gpio, uint32_t events) {
 
         is_leds_pwm_enabled = !is_leds_pwm_enabled;
     }
-    else if (gpio == SW_PIN && (current_time - last_time_btn_sw > 200000))
+    else if (gpio == SW_PIN && (current_time - last_time_btn_sw > 250000))
     {
         // Atualiza o tempo do último evento do botão B.
         last_time_btn_sw = current_time;
