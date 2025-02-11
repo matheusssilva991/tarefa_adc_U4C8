@@ -80,7 +80,7 @@ int main()
         // Imprime os valores lidos na comunicação serial.
         printf("VRX: %f, VRY: %f, SW: %d\n", tmp_x, tmp_y, adc_sw_value);
 
-        ssd1306_fill(&ssd, !color);
+        ssd1306_fill(&ssd, !adc_sw_value);
         ssd1306_rect(&ssd, 0, 0, 128, 64, adc_sw_value, !adc_sw_value); // Desenha um retângulo
                                                                // Limpa o display
         ssd1306_rect(&ssd, (int)tmp_y, (int)tmp_x, RECT_XY_SHAPE, RECT_XY_SHAPE, color, true); // Desenha um retângulo
@@ -163,7 +163,9 @@ void gpio_irq_handler(uint gpio, uint32_t events) {
         last_time_btn_sw = current_time;
 
         adc_sw_value = !adc_sw_value;
-        
+
+        gpio_put(GREEN_LED_PIN, !gpio_get(GREEN_LED_PIN));
+
     }
 
 }
