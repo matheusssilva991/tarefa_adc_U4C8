@@ -25,7 +25,7 @@
 #define ADC_MAX_VALUE 4096
 #define ADC_MIDDLE_VALUE ADC_MAX_VALUE / 2
 #define RECT_XY_SHAPE 8
-#define VRXY_VALUE_ERROR 100
+#define VRXY_VALUE_ERROR 130
 
 uint init_led_pwm(uint8_t led_pin);
 void init_btn(uint8_t btn_pin);
